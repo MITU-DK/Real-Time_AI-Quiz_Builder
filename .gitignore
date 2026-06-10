@@ -1,0 +1,9 @@
+# Backend patterns
+backend/.env
+backend/node_modules/
+backend/dist/
+backend/*.log
+
+# Root documentation files
+phase*.md
+techstack.md
