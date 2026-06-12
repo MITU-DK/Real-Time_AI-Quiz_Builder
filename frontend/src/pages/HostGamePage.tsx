@@ -3,13 +3,7 @@
 // Connects to the socket, joins as host, then delegates rendering to
 // focused sub-components based on the current game phase.
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useGameStore } from '../store/useGameStore';
-import { useAuthStore } from '../store/useAuthStore';
-import { connectSocket, disconnectSocket, getSocket } from '../services/socket';
-import { useSyncTimer } from '../hooks/useSyncTimer';
-import { useGameSocket } from '../hooks/useGameSocket';
+import { useHostGame } from './useHostGame';
 
 //Sub-views
 import LobbyView from '../components/host/LobbyView';
@@ -19,59 +13,19 @@ import LeaderboardView from '../components/host/LeaderboardView';
 import GameOverView from '../components/host/GameOverView';
 
 const HostGamePage = () => {
-  const { pin } = useParams<{ pin: string }>();
-
-  //Store selectors
-  const phase = useGameStore((s) => s.phase);
-  const players = useGameStore((s) => s.players);
-  const totalPlayers = useGameStore((s) => s.totalPlayers);
-  const currentQuestion = useGameStore((s) => s.currentQuestion);
-  const correctOptionIndex = useGameStore((s) => s.correctOptionIndex);
-  const leaderboard = useGameStore((s) => s.leaderboard);
-  const finalLeaderboard = useGameStore((s) => s.finalLeaderboard);
-  const setPin = useGameStore((s) => s.setPin);
-  const setIsHost = useGameStore((s) => s.setIsHost);
-
-  // Registers all socket listeners, removes them on unmount
-  useGameSocket();
-
-  const user = useAuthStore((s) => s.user);
-  const timeRemaining = useSyncTimer();
-
-  const [countdown, setCountdown] = useState<number | null>(null);
-
-  //Connect and join as host on mount
-  useEffect(() => {
-    if (!pin || !user) return;
-
-    setPin(pin);
-    setIsHost(true);
-
-    const socket = connectSocket();
-
-    socket.emit('join_as_host', { pin, hostId: user.id });
-    socket.emit('sync_time', { t0: Date.now() });
-
-    return () => {
-      disconnectSocket();
-    };
-  }, [pin, user]);
-
-  //Kick off the game with a 3-second visual countdown
-  const handleStartGame = () => {
-    setCountdown(3);
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev === null || prev <= 1) {
-          clearInterval(interval);
-          setCountdown(null);
-          getSocket().emit('start_game', { pin });
-          return null;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
+  const {
+    pin,
+    phase,
+    players,
+    totalPlayers,
+    currentQuestion,
+    correctOptionIndex,
+    leaderboard,
+    finalLeaderboard,
+    countdown,
+    timeRemaining,
+    handleStartGame
+  } = useHostGame();
 
   //Pre-game countdown overlay
   if (countdown !== null) {

@@ -12,6 +12,17 @@ type GameNamespace = Namespace<ClientToServerEvents, ServerToClientEvents, {}, S
 type GameSocket = Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>;
 
 export const handleStartGame = (namespace: GameNamespace, socket: GameSocket): void => {
+  //EVENT: trigger_countdown
+  // Host triggers the 3..2..1 overlay for all clients in the room
+  socket.on('trigger_countdown', async ({ pin }) => {
+    try {
+      if (!socket.data.hostId) return;
+      namespace.to(pin).emit('show_countdown');
+    } catch (err) {
+      console.error('[game] trigger_countdown error:', err);
+    }
+  });
+
   //EVENT: start_game
   // Only the host should emit this. We verify they own the session.
   socket.on('start_game', async ({ pin }) => {

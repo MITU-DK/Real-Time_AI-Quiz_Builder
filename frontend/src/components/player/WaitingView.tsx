@@ -1,4 +1,4 @@
-// ─── Player: WaitingView ──────────────────────────────────────────────────────
+// Player: WaitingView 
 // Shown in the lobby while the host has not started the game yet.
 
 interface WaitingViewProps {

@@ -1,4 +1,4 @@
-// ─── LeaderboardRow ───────────────────────────────────────────────────────────
+// LeaderboardRow  
 // A single row in a leaderboard list.
 // Used by the Host's LeaderboardView and GameOverView.
 

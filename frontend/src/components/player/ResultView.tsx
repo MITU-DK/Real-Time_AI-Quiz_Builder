@@ -1,4 +1,4 @@
-// ─── Player: ResultView ───────────────────────────────────────────────────────
+// Player: ResultView 
 // Shown after a question ends. Tells the player if they were correct or wrong
 // and shows their running score.
 
@@ -10,17 +10,15 @@ interface ResultViewProps {
 
 const ResultView = ({ wasCorrect, correctOptionText, myScore }: ResultViewProps) => (
   <div
-    className={`min-h-screen flex flex-col items-center justify-center p-6 ${
-      wasCorrect
+    className={`min-h-screen flex flex-col items-center justify-center p-6 ${wasCorrect
         ? 'bg-gradient-to-br from-green-50 to-emerald-50'
         : 'bg-gradient-to-br from-red-50 to-orange-50'
-    }`}
+      }`}
   >
     <div className="animate-fade-in text-center">
       <div
-        className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 ${
-          wasCorrect ? 'bg-green-100' : 'bg-red-100'
-        }`}
+        className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 ${wasCorrect ? 'bg-green-100' : 'bg-red-100'
+          }`}
       >
         <span className="text-5xl">{wasCorrect ? '🎉' : '😕'}</span>
       </div>

@@ -1,5 +1,5 @@
-// ─── Host: LeaderboardView ────────────────────────────────────────────────────
-// Shown between questions. Displays the current top-5 rankings.
+// Host: LeaderboardView 
+// Shown BETWEEN questions. Displays the current top-5 rankings.
 
 import LeaderboardRow from '../shared/LeaderboardRow';
 import type { LeaderboardEntry } from '../../types';

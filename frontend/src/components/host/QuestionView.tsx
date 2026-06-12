@@ -20,10 +20,7 @@ const QuestionView = ({ question, timeRemaining }: QuestionViewProps) => {
       <TimerBar seconds={seconds} progress={progress} />
 
       <div className="flex-1 flex flex-col items-center justify-center p-8">
-        {/* Big timer number */}
-        <div className={`text-6xl font-bold font-[Outfit] mb-4 ${seconds <= 5 ? 'text-red-500' : 'text-slate-700'}`}>
-          {seconds}
-        </div>
+
 
         {/* Question card */}
         <div className="bg-slate-50 rounded-2xl p-8 max-w-3xl w-full text-center mb-8 border border-slate-100">

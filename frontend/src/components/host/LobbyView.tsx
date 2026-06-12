@@ -1,4 +1,4 @@
-// ─── Host: LobbyView ─────────────────────────────────────────────────────────
+// Host: LobbyView 
 // Shown before the game starts. Displays the PIN, player list, and Start button.
 
 import type { Player } from '../../types';

@@ -3,12 +3,7 @@
 // Reconnects to the socket, restores credentials from localStorage, then
 // delegates rendering to focused sub-components based on the current game phase.
 
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useGameStore } from '../store/useGameStore';
-import { connectSocket, getSocket } from '../services/socket';
-import { useSyncTimer } from '../hooks/useSyncTimer';
-import { useGameSocket } from '../hooks/useGameSocket';
+import { usePlayerGame } from './usePlayerGame';
 
 // ─── Sub-views
 import WaitingView     from '../components/player/WaitingView';
@@ -19,54 +14,33 @@ import LeaderboardView from '../components/player/LeaderboardView';
 import GameOverView    from '../components/player/GameOverView';
 
 const PlayerGamePage = () => {
-  const { pin } = useParams<{ pin: string }>();
+  const {
+    phase,
+    currentQuestion,
+    myAnswer,
+    isLocked,
+    myScore,
+    myNickname,
+    myPlayerId,
+    leaderboard,
+    finalLeaderboard,
+    submitAnswer,
+    timeRemaining,
+    wasCorrect,
+    correctOptionText,
+    countdown
+  } = usePlayerGame();
 
-  // ─── Store selectors
-  const phase              = useGameStore((s) => s.phase);
-  const currentQuestion    = useGameStore((s) => s.currentQuestion);
-  const myAnswer           = useGameStore((s) => s.myAnswer);
-  const isLocked           = useGameStore((s) => s.isLocked);
-  const correctOptionIndex = useGameStore((s) => s.correctOptionIndex);
-  const myScore            = useGameStore((s) => s.myScore);
-  const myNickname         = useGameStore((s) => s.myNickname);
-  const myPlayerId         = useGameStore((s) => s.myPlayerId);
-  const leaderboard        = useGameStore((s) => s.leaderboard);
-  const finalLeaderboard   = useGameStore((s) => s.finalLeaderboard);
-  const submitAnswer = useGameStore((s) => s.submitAnswer);
-  const setPin       = useGameStore((s) => s.setPin);
-  const setMyPlayer  = useGameStore((s) => s.setMyPlayer);
-  const setPhase     = useGameStore((s) => s.setPhase);
-
-  // Registers all socket listeners, removes them on unmount
-  useGameSocket();
-
-  const timeRemaining = useSyncTimer();
-
-  // ─── Connect socket and restore credentials on mount
-  useEffect(() => {
-    if (!pin) return;
-
-    setPin(pin);
-
-    // Restore player identity from localStorage (supports page refresh)
-    const storedId       = localStorage.getItem('player_id');
-    const storedNickname = localStorage.getItem('player_nickname');
-    if (storedId && storedNickname && !myPlayerId) {
-      setMyPlayer(parseInt(storedId, 10), storedNickname);
-    }
-
-    const socket = connectSocket();
-
-    // Rejoin the room if we have stored credentials (handles page refresh)
-    if (storedId && storedNickname) {
-      socket.emit('rejoin_room', { playerId: parseInt(storedId, 10), pin });
-    }
-
-    // NTP clock sync
-    getSocket().emit('sync_time', { t0: Date.now() });
-
-    if (phase === 'idle') setPhase('lobby');
-  }, [pin]);
+  if (countdown !== null) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-700">
+        <div className="text-center animate-countdown" key={countdown}>
+          <p className="text-9xl font-bold text-white font-[Outfit] drop-shadow-xl">{countdown}</p>
+          <p className="text-xl text-white/70 mt-4">Get ready!</p>
+        </div>
+      </div>
+    );
+  }
 
   // ─── Phase-based rendering
 
@@ -82,12 +56,6 @@ const PlayerGamePage = () => {
   }
 
   if (phase === 'results') {
-    const wasCorrect       = myAnswer === correctOptionIndex;
-    const correctOptionText =
-      correctOptionIndex !== null && currentQuestion
-        ? currentQuestion.options[correctOptionIndex]
-        : null;
-
     return (
       <ResultView
         wasCorrect={wasCorrect}

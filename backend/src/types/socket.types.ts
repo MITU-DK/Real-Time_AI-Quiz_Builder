@@ -104,6 +104,7 @@ export interface ClientToServerEvents {
   // Phase 4
   join_as_host: (payload: JoinAsHostPayload) => void;   // host enters the socket room
   sync_time: (payload: SyncTimePayload) => void;     // NTP clock handshake
+  trigger_countdown: (payload: { pin: string }) => void; // host triggers the 3..2..1 overlay
   start_game: (payload: { pin: string }) => void;     // host kicks off the game
   submit_answer: (payload: SubmitAnswerPayload) => void; // player submits their choice
 }
@@ -118,6 +119,7 @@ export interface ServerToClientEvents {
 
   // Phase 4 — game loop
   joined_as_host: (data: JoinedAsHostPayload) => void;
+  show_countdown: () => void;
   sync_time_response: (data: SyncTimeResponsePayload) => void;
   question_start: (data: QuestionStartPayload) => void;
   question_end: (data: QuestionEndPayload) => void;

@@ -1,4 +1,4 @@
-// ─── Player: LockedView ───────────────────────────────────────────────────────
+// Player: LockedView 
 // Shown after the player has tapped an answer. Displays their locked choice
 // and tells them to wait for other players.
 

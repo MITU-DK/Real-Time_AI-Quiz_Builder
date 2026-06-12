@@ -1,4 +1,4 @@
-// ─── TimerBar ─────────────────────────────────────────────────────────────────
+// TimerBar 
 // Displays a shrinking progress bar and countdown number.
 // Used in both the Host question view and the Player buzzer view.
 
@@ -23,7 +23,9 @@ const TimerBar = ({ seconds, progress }: TimerBarProps) => {
       {/* Countdown number */}
       <div className="text-center py-2 shrink-0">
         <span className={`text-3xl font-bold font-[Outfit] ${isUrgent ? 'text-red-500' : 'text-slate-700'}`}>
+
           {seconds}
+
         </span>
       </div>
     </>

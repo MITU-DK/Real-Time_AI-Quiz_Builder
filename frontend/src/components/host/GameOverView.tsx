@@ -21,7 +21,7 @@ const GameOverView = ({ finalLeaderboard }: GameOverViewProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 flex flex-col items-center justify-center p-8 relative overflow-hidden">
-      {/* Confetti particles */}
+      {/* Confetti particles ---that falls from top screen to bottom at end . */}
       {Array.from({ length: 20 }).map((_, i) => (
         <div
           key={i}
@@ -50,8 +50,8 @@ const GameOverView = ({ finalLeaderboard }: GameOverViewProps) => {
               className="flex flex-col items-center animate-slide-up"
               style={{ animationDelay: `${colIdx * 200}ms` }}
             >
-              <span className="text-4xl mb-2">{MEDALS[podiumIdx]}</span>
-              <p className="font-bold text-slate-800 font-[Outfit] text-lg">{entry.nickname}</p>
+              <span className="text-4xl mb-2">  {MEDALS[podiumIdx]}   </span>
+              <p className="font-bold text-slate-800 font-[Outfit] text-lg">    {entry.nickname}   </p>
               <p className="text-sm text-slate-500 mb-2">{entry.score} pts</p>
               <div className={`w-24 ${PODIUM_HEIGHTS[podiumIdx]} bg-blue-${podiumIdx === 1 ? '600' : podiumIdx === 0 ? '500' : '400'} rounded-t-xl`} />
             </div>

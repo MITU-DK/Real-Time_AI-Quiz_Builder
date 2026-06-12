@@ -1,96 +1,26 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getMyQuizzes, generateQuizDraft, saveQuiz, hostGame, deleteQuiz } from '../services/api';
-import { useAuthStore } from '../store/useAuthStore';
-import type { Quiz } from '../types';
+import { useDashboard } from './useDashboard';
 
 const DashboardPage = () => {
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
-  const [topic, setTopic] = useState('');
-  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
-  const [numQuestions, setNumQuestions] = useState(5);
-  const [showGenerator, setShowGenerator] = useState(false);
-  const [error, setError] = useState('');
-
-  const user = useAuthStore((s) => s.user);
-  const logout = useAuthStore((s) => s.logout);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
-
-  const fetchQuizzes = async () => {
-    try {
-      const data = await getMyQuizzes();
-      setQuizzes(data.quizzes || data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGenerate = async () => {
-    if (!topic.trim()) return;
-    setGenerating(true);
-    setError('');
-
-    try {
-      // 1. AI generates the draft
-      const draft = await generateQuizDraft(topic, difficulty, numQuestions);
-
-      // 2. Save it to the DB
-      const questions = (draft.questions || []).map((q: any) => ({
-        question_text: q.question_text,
-        options: q.options,
-        correct_option_index: q.correct_option_index,
-        time_limit_seconds: draft.time_limit_seconds || q.time_limit_seconds || 20,
-        points: draft.points || q.points || 200,
-      }));
-
-      const saved = await saveQuiz(
-        draft.quiz_title || draft.title || topic,
-        topic,
-        difficulty,
-        questions
-      );
-
-      // 3. Refresh the list
-      await fetchQuizzes();
-      setShowGenerator(false);
-      setTopic('');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setGenerating(false);
-    }
-  };
-
-  const handleHost = async (quizId: number) => {
-    try {
-      const data = await hostGame(quizId);
-      navigate(`/host/${data.pin}`);
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  const handleDelete = async (quizId: number) => {
-    try {
-      await deleteQuiz(quizId);
-      setQuizzes((prev) => prev.filter((q) => q.id !== quizId));
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  const {
+    quizzes,
+    loading,
+    generating,
+    topic,
+    setTopic,
+    difficulty,
+    setDifficulty,
+    numQuestions,
+    setNumQuestions,
+    showGenerator,
+    setShowGenerator,
+    error,
+    setError,
+    user,
+    handleGenerate,
+    handleHost,
+    handleDelete,
+    handleLogout
+  } = useDashboard();
 
   const difficultyColor = (d: string) => {
     switch (d) {
@@ -106,7 +36,7 @@ const DashboardPage = () => {
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-slate-100 sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-brand-700 font-[Outfit]">⚡ QuizBlitz</h1>
+          <h1 className="text-2xl font-bold text-brand-500 font-[Outfit]">⚡ QuizArena</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-slate-500">Hi, {user?.display_name}</span>
             <button onClick={handleLogout} className="text-sm text-slate-400 hover:text-red-500 transition cursor-pointer">
@@ -133,9 +63,9 @@ const DashboardPage = () => {
           </div>
           <button
             onClick={() => setShowGenerator(!showGenerator)}
-            className="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-200 hover:shadow-brand-300 cursor-pointer"
+            className="px-5 py-2.5 bg-green-600 hover:bg-green-800 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-200 hover:shadow-brand-300 cursor-pointer"
           >
-            {showGenerator ? '✕ Close' : '✨ Generate Quiz with AI'}
+            {showGenerator ? '✕ Close' : <b>✨ Generate Quiz with AI</b>}
           </button>
         </div>
 
