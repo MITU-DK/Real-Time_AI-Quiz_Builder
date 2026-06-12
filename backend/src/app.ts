@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/authRoutes";
 import quizRoutes from "./routes/quizRoutes";
+import gameRoutes from "./routes/gameRoutes";
 
 dotenv.config();
 
@@ -49,6 +50,7 @@ app.use("/api/auth", authLimiter);
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/quizzes", quizRoutes);
+app.use("/api/game", gameRoutes);
 
 // Health Check Endpoint
 app.get("/health", (_req, res) => {

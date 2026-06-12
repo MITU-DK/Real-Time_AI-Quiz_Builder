@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS quizzes (
 );
 
 -- TABLE 3: questions
--- Master-detail relationship with quizzes.
+-- refernce only with  quiz.
 -- options is a JSONB array of exactly 4 strings. 
 CREATE TABLE IF NOT EXISTS questions (
   id                  SERIAL PRIMARY KEY,
@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS participants (
   session_id  INTEGER NOT NULL REFERENCES game_sessions(id) ON DELETE CASCADE,
   nickname    VARCHAR(50) NOT NULL,
   score       INTEGER NOT NULL DEFAULT 0,
+  final_rank  INTEGER,                        -- set at game_over (1 = winner), NULL during play
   joined_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   -- Ensures no duplicate nicknames within the same session
   UNIQUE (session_id, nickname)
