@@ -23,6 +23,33 @@ export interface PlayerLeftPayload {
   nickname: string;
   totalPlayers: number;
 }
+// Server → all clients: a question is now active
+export interface QuestionStartPayload {
+  questionIndex: number;
+  questionText: string;
+  options: string[];               // 4 answer strings (correct one is NOT flagged)
+  timeLimitSeconds: number;
+  points: number;                  // max possible score for this question
+  tDeadline: number;               // absolute UTC millisecond when answers stop being accepted
+}
+
+// One row in the leaderboard (used in QuestionEndPayload and GameOverPayload)
+export interface LeaderboardEntry {
+  playerId: number;
+  nickname: string;
+  score: number;
+}
+export interface SyncTimeResponsePayload {
+  t0: number; // echoed back so the client can compute round-trip time
+  t1: number; // server timestamp at ingestion (ms)
+  t2: number; // server timestamp just before sending the reply (ms)
+}
+// Server → host only: confirmed they have joined the room
+export interface JoinedAsHostPayload {
+  pin: string;
+  totalPlayers: number; // players already in the lobby at the time of host join
+}
+
 
 // Server → reconnecting player: their current game state snapshot
 export interface ReconciliationPayload {
@@ -39,46 +66,18 @@ export interface SyncTimePayload {
   t0: number; // client's local timestamp at send time (ms)
 }
 
-export interface SyncTimeResponsePayload {
-  t0: number; // echoed back so the client can compute round-trip time
-  t1: number; // server timestamp at ingestion (ms)
-  t2: number; // server timestamp just before sending the reply (ms)
-}
-
 // Host joining the WebSocket room (separate event from player join)
 export interface JoinAsHostPayload {
   pin: string;
   hostId: number; // must match game_sessions.host_id in the DB
 }
 
-// Server → host only: confirmed they have joined the room
-export interface JoinedAsHostPayload {
-  pin: string;
-  totalPlayers: number; // players already in the lobby at the time of host join
-}
 
 // Player submitting their answer for the current question
 export interface SubmitAnswerPayload {
   pin: string;
   questionIndex: number;           // guards against stale submissions for the wrong question
   selectedOptionIndex: 0 | 1 | 2 | 3;
-}
-
-// Server → all clients: a question is now active
-export interface QuestionStartPayload {
-  questionIndex: number;
-  questionText: string;
-  options: string[];               // 4 answer strings (correct one is NOT flagged)
-  timeLimitSeconds: number;
-  points: number;                  // max possible score for this question
-  tDeadline: number;               // absolute UTC millisecond when answers stop being accepted
-}
-
-// One row in the leaderboard (used in QuestionEndPayload and GameOverPayload)
-export interface LeaderboardEntry {
-  playerId: number;
-  nickname: string;
-  score: number;
 }
 
 // Server → all clients: a question has closed

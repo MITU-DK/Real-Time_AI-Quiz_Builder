@@ -24,7 +24,9 @@ export const authenticateToken = (
       throw new Error("JWT_SECRET is not configured.");
     }
     const decoded = jwt.verify(token, secret) as JwtPayload;
+
     req.user = decoded;
+
     next(); //attaches the DECODED payload to req.user so controllers can access the logged-in userId.
 
   }

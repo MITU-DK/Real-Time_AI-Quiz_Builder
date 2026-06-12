@@ -16,10 +16,7 @@ export const getGameResults = async (req: Request, res: Response): Promise<void>
   try {
 
     // 1. Look up the game session by PIN
-    const sessionResult = await pool.query(
-      `SELECT id, status FROM game_sessions WHERE pin = $1 LIMIT 1`,
-      [pin]
-    );
+    const sessionResult = await pool.query(`SELECT id, status FROM game_sessions WHERE pin = $1 LIMIT 1`, [pin]);
 
     if (sessionResult.rows.length === 0) {
       res.status(404).json({ error: 'Game session not found.' });
@@ -39,11 +36,7 @@ export const getGameResults = async (req: Request, res: Response): Promise<void>
     // 3. Fetch all participants ordered by final_rank ascending (1st place first).
     //    final_rank is written by endQuestion.ts when game_over fires.
     const participantsResult = await pool.query(
-      `SELECT id, nickname, score, final_rank
-       FROM participants
-       WHERE session_id = $1
-       ORDER BY final_rank ASC NULLS LAST`,
-      [session.id]
+      `SELECT id, nickname, score, final_rank FROM participants WHERE session_id = $1 ORDER BY final_rank ASC NULLS LAST`, [session.id]
     );
 
     const players: GameResultEntry[] = participantsResult.rows.map((row) => ({

@@ -2,9 +2,8 @@ import { redis } from '../config/redis';
 
 // cleanupGame
 //
-// Called once when a game transitions to GAME_OVER.
-// Deletes all transient Redis keys associated with the game so memory
-// is not leaked between game sessions.
+// Called once when GAME_OVER.
+// Deletes all transient Redis keys associated with the game so memory is not leaked between game sessions.
 //
 // Keys deleted:
 //   session:{pin}:state      - the active question state hash
@@ -12,16 +11,13 @@ import { redis } from '../config/redis';
 //   room:{pin}:presence       - the set of connected playerIds
 //   player:{playerId}:meta    - nickname lookup hash for each player
 //
-// We do NOT delete socket:{socketId} hashes here because sockets may
-// still be connected and those keys are cleaned up by disconnect.handler.ts.
+// We do NOT delete socket:{socketId} hashes here because sockets may still be connected and 
+// those keys are cleaned up by disconnect.handler.ts.
 
 export const cleanupGame = async (pin: string, playerIds: number[]): Promise<void> => {
 
   const keysToDelete: string[] = [
-    `session:${pin}:state`,
-    `session:${pin}:leaderboard`,
-    `room:${pin}:presence`,
-    // one key per player
+    `session:${pin}:state`, `session:${pin}:leaderboard`, `room:${pin}:presence`, // one key per player
     ...playerIds.map((id) => `player:${id}:meta`),
   ];
 
