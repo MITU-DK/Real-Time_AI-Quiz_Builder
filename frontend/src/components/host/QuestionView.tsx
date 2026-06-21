@@ -14,10 +14,18 @@ interface QuestionViewProps {
 const QuestionView = ({ question, timeRemaining }: QuestionViewProps) => {
   const seconds = Math.ceil(timeRemaining);
   const progress = (timeRemaining / question.timeLimitSeconds) * 100;
+  const isUrgent = seconds <= 5;
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <TimerBar seconds={seconds} progress={progress} />
+
+      {/* Countdown number */}
+      <div className="text-center py-2 shrink-0">
+        <span className={`text-3xl font-bold font-[Outfit] ${isUrgent ? 'text-red-500' : 'text-slate-700'}`}>
+          {seconds}
+        </span>
+      </div>
 
       <div className="flex-1 flex flex-col items-center justify-center p-8">
 
