@@ -25,6 +25,7 @@ interface GameState {
   //Player answer
   myAnswer: number | null; // selectedOptionIndex
   isLocked: boolean;
+  answerCount: number; // how many players have answered current question
 
   //Results
   correctOptionIndex: number | null;
@@ -41,6 +42,7 @@ interface GameState {
   setPin: (pin: string) => void;
   setIsHost: (isHost: boolean) => void;
   setPhase: (phase: GamePhase) => void;
+  setAnswerCount: (count: number) => void;
   setMyPlayer: (playerId: number, nickname: string) => void;
   submitAnswer: (optionIndex: number) => void;
   resetGame: () => void;
@@ -57,6 +59,7 @@ const initialState = {
   clockOffset: 0,
   myAnswer: null as number | null,
   isLocked: false,
+  answerCount: 0,
   correctOptionIndex: null as number | null,
   leaderboard: [] as LeaderboardEntry[],
   finalLeaderboard: [] as LeaderboardEntry[],
@@ -71,6 +74,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   setPin: (pin) => set({ pin }),
   setIsHost: (isHost) => set({ isHost }),
   setPhase: (phase) => set({ phase }),
+  setAnswerCount: (count) => set({ answerCount: count }),
   setMyPlayer: (playerId, nickname) => set({ myPlayerId: playerId, myNickname: nickname }),
 
   submitAnswer: (optionIndex) => {

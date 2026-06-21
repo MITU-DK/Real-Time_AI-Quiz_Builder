@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage';
 import HostGamePage from './pages/HostGamePage';
 import PlayerJoinPage from './pages/PlayerJoinPage';
 import PlayerGamePage from './pages/PlayerGamePage';
+import PastResultsPage from './pages/PastResultsPage';
 
 // Protected Route Wrapper 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -22,7 +23,6 @@ const App = () => {
     hydrate();
   }, []);
 
-
   return (
     <BrowserRouter>
       <Routes>
@@ -34,6 +34,7 @@ const App = () => {
         {/*---------- Protected host route-----------s */}
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/host/:pin" element={<ProtectedRoute><HostGamePage /></ProtectedRoute>} />
+        <Route path="/results/:pin" element={<ProtectedRoute><PastResultsPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

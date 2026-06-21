@@ -19,7 +19,10 @@ const DashboardPage = () => {
     handleGenerate,
     handleHost,
     handleDelete,
-    handleLogout
+    handleLogout,
+    resultsPin,
+    setResultsPin,
+    handleViewResults
   } = useDashboard();
 
   const difficultyColor = (d: string) => {
@@ -56,17 +59,38 @@ const DashboardPage = () => {
         )}
 
         {/* Actions */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
           <div>
             <h2 className="text-2xl font-bold text-slate-800 font-[Outfit]">My Quizzes</h2>
             <p className="text-sm text-slate-400 mt-1">{quizzes.length} quiz{quizzes.length !== 1 ? 'zes' : ''} created</p>
           </div>
-          <button
-            onClick={() => setShowGenerator(!showGenerator)}
-            className="px-5 py-2.5 bg-green-600 hover:bg-green-800 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-200 hover:shadow-brand-300 cursor-pointer"
-          >
-            {showGenerator ? '✕ Close' : <b>✨ Generate Quiz with AI</b>}
-          </button>
+          
+          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+            {/* View Past Results Form */}
+            <form onSubmit={handleViewResults} className="flex items-center">
+              <input 
+                type="text" 
+                placeholder="Game PIN..." 
+                value={resultsPin}
+                onChange={(e) => setResultsPin(e.target.value)}
+                className="w-32 px-3 py-2.5 rounded-l-xl border border-slate-200 bg-white focus:ring-2 focus:ring-brand-400 focus:border-transparent outline-none uppercase transition font-mono text-sm"
+              />
+              <button 
+                type="submit" 
+                disabled={!resultsPin.trim()}
+                className="px-4 py-2.5 bg-brand-50 hover:bg-brand-100 text-brand-600 font-semibold rounded-r-xl border border-l-0 border-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                Results
+              </button>
+            </form>
+
+            <button
+              onClick={() => setShowGenerator(!showGenerator)}
+              className="px-5 py-2.5 bg-green-600 hover:bg-green-800 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-200 hover:shadow-brand-300 cursor-pointer whitespace-nowrap"
+            >
+              {showGenerator ? '✕ Close' : '✨ Generate Quiz with AI'}
+            </button>
+          </div>
         </div>
 
         {/* AI Generator Panel */}

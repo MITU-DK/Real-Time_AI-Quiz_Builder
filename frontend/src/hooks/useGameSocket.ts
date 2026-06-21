@@ -53,8 +53,13 @@ export const useGameSocket = () => {
         tDeadline: data.tDeadline,
         myAnswer: null,
         isLocked: false,
+        answerCount: 0,
         correctOptionIndex: null,
       });
+    });
+
+    socket.on('answer_count_updated', (data: { answerCount: number }) => {
+      useGameStore.setState({ answerCount: data.answerCount });
     });
 
     //Game loop: question ends, show results then auto-transition to leaderboard
@@ -102,6 +107,7 @@ export const useGameSocket = () => {
       socket.off('player_left');
       socket.off('sync_time_response');
       socket.off('question_start');
+      socket.off('answer_count_updated');
       socket.off('question_end');
       socket.off('game_over');
       socket.off('joined_as_host');

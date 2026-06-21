@@ -23,6 +23,7 @@ const HostGamePage = () => {
     leaderboard,
     finalLeaderboard,
     countdown,
+    answerCount,
     timeRemaining,
     handleStartGame
   } = useHostGame();
@@ -52,7 +53,7 @@ const HostGamePage = () => {
   }
 
   if (phase === 'question' && currentQuestion) {
-    return <QuestionView question={currentQuestion} timeRemaining={timeRemaining} />;
+    return <QuestionView question={currentQuestion} timeRemaining={timeRemaining} answerCount={answerCount} totalPlayers={totalPlayers} />;
   }
 
   if (phase === 'results' && currentQuestion) {

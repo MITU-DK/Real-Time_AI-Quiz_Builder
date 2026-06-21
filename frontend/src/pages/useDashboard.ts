@@ -13,6 +13,7 @@ export const useDashboard = () => {
   const [numQuestions, setNumQuestions] = useState(5);
   const [showGenerator, setShowGenerator] = useState(false);
   const [error, setError] = useState('');
+  const [resultsPin, setResultsPin] = useState('');
 
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
@@ -84,6 +85,13 @@ export const useDashboard = () => {
     }
   };
 
+  const handleViewResults = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (resultsPin.trim()) {
+      navigate(`/results/${resultsPin.trim()}`);
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -107,6 +115,9 @@ export const useDashboard = () => {
     handleGenerate,
     handleHost,
     handleDelete,
-    handleLogout
+    handleLogout,
+    resultsPin,
+    setResultsPin,
+    handleViewResults
   };
 };

@@ -16,6 +16,7 @@ export const useHostGame = () => {
   const correctOptionIndex = useGameStore((s) => s.correctOptionIndex);
   const leaderboard = useGameStore((s) => s.leaderboard);
   const finalLeaderboard = useGameStore((s) => s.finalLeaderboard);
+  const answerCount = useGameStore((s) => s.answerCount);
   const setPin = useGameStore((s) => s.setPin);
   const setIsHost = useGameStore((s) => s.setIsHost);
 
@@ -68,6 +69,7 @@ export const useHostGame = () => {
     leaderboard,
     finalLeaderboard,
     countdown,
+    answerCount,
     timeRemaining,
     handleStartGame
   };
