@@ -25,8 +25,7 @@ const startServer = async (): Promise<void> => {
   const io = initSocket(httpServer);
 
   // Step 4: Start the background game scheduler.
-  //         This 100ms polling loop watches for question deadlines in Redis
-  //         and triggers question_end when time runs out (the timeout path).
+  // This 100ms polling loop watches for question deadlines in Redis and triggers question_end when time runs out (the timeout path).
   const gameNamespace = io.of('/game');
   startScheduler(gameNamespace);
 

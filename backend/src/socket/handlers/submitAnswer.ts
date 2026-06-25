@@ -110,6 +110,7 @@ export const handleSubmitAnswer = (namespace: GameNamespace, socket: GameSocket)
 
       // 8. Increment the answer counter for this question
       const answerCount = await redis.hincrby(`session:${pin}:state`, 'answer_count', 1);
+      namespace.to(pin).emit('answer_count_updated', { answerCount });
 
       // 9. EARLY TERMINATION CHECK
       //    If every connected player has answered, end the question immediately.

@@ -121,6 +121,7 @@ export interface ServerToClientEvents {
   joined_as_host: (data: JoinedAsHostPayload) => void;
   show_countdown: () => void;
   sync_time_response: (data: SyncTimeResponsePayload) => void;
+  answer_count_updated: (data: { answerCount: number }) => void;
   question_start: (data: QuestionStartPayload) => void;
   question_end: (data: QuestionEndPayload) => void;
   game_over: (data: GameOverPayload) => void;
