@@ -46,7 +46,7 @@ export const useDashboard = () => {
         question_text: q.question_text,
         options: q.options,
         correct_option_index: q.correct_option_index,
-        time_limit_seconds: draft.time_limit_seconds || q.time_limit_seconds || 20,
+        time_limit_seconds: draft.time_limit_seconds || q.time_limit_seconds || 10,
         points: draft.points || q.points || 200,
       }));
 

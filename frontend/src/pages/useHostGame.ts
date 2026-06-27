@@ -19,6 +19,7 @@ export const useHostGame = () => {
   const answerCount = useGameStore((s) => s.answerCount);
   const setPin = useGameStore((s) => s.setPin);
   const setIsHost = useGameStore((s) => s.setIsHost);
+  const resetGame = useGameStore((s) => s.resetGame);
 
   useGameSocket();
 
@@ -29,6 +30,9 @@ export const useHostGame = () => {
 
   useEffect(() => {
     if (!pin || !user) return;
+
+    // Clear all stale state from any previous game before joining a new one.
+    resetGame();
 
     setPin(pin);
     setIsHost(true);

@@ -51,7 +51,7 @@ export const createQuiz = async (req: Request, res: Response): Promise<void> => 
            (quiz_id, question_text, options, correct_option_index, time_limit_seconds, points, question_order)
          VALUES ($1, $2, $3::jsonb, $4, $5, $6, $7)
          RETURNING *`,
-        [newQuiz.id, q.question_text, JSON.stringify(q.options), q.correct_option_index, q.time_limit_seconds ?? 20, q.points ?? 200, i,]
+        [newQuiz.id, q.question_text, JSON.stringify(q.options), q.correct_option_index, q.time_limit_seconds ?? 10, q.points ?? 200, i,]
       );
 
       insertedQuestions.push(questionResult.rows[0]);

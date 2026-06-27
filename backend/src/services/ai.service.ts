@@ -1,6 +1,6 @@
 import { groq } from '../config/groq';
 
-export const generateQuiz = async (topic: string, difficulty: string) => {
+export const generateQuiz = async (topic: string, difficulty: string, numQuestions: number = 5) => {
   const systemPrompt = `You are an expert educator and quiz builder. Your task is to generate a challenging, accurate, and educational quiz based on the user's requested topic and difficulty level.
 
 You MUST respond with ONLY valid JSON — no prose, no markdown, no code blocks.
@@ -9,7 +9,7 @@ The JSON must exactly match this structure:
 {
   "quiz_title": "string — a catchy title for the quiz",
   "quiz_difficulty": "easy" | "medium" | "hard",
-  "time_limit_seconds": 10 | 20 | 30 | 45 | 60,
+  "time_limit_seconds": 10,
   "points": 100 | 200 | 500 | 1000,
   "questions": [
     {
@@ -21,13 +21,13 @@ The JSON must exactly match this structure:
 }
 
 Rules:
-- "questions" must contain exactly 5 items.
+- "questions" must contain exactly ${numQuestions} items.
 - "options" must contain exactly 4 strings per question.
 - "correct_option_index" must be an integer from 0 to 3.
 - Do not add any extra fields.
 - Do not wrap the JSON in markdown or backticks.`;
 
-  const userPrompt = `Generate a 5-question quiz about "${topic}" at a "${difficulty}" difficulty level.`;
+  const userPrompt = `Generate a ${numQuestions}-question quiz about "${topic}" at a "${difficulty}" difficulty level.`;
 
   try {
     const chatCompletion = await groq.chat.completions.create({

@@ -91,9 +91,9 @@ export const useGameSocket = () => {
       });
     });
 
-    //Host confirmation
+    //Host confirmation — clear stale player list from any previous session
     socket.on('joined_as_host', (data: { totalPlayers: number }) => {
-      useGameStore.setState({ totalPlayers: data.totalPlayers, phase: 'lobby' });
+      useGameStore.setState({ totalPlayers: data.totalPlayers, phase: 'lobby', players: [] });
     });
 
     //Error

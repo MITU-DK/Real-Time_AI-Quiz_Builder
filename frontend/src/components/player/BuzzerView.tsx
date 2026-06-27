@@ -56,9 +56,8 @@ const BuzzerView = ({ question, timeRemaining, onAnswer }: BuzzerViewProps) => {
           ))}
         </div>
 
-        {/* Points info — mirrors host */}
         <p className="text-sm text-slate-400 mt-6">
-          {question.points} points • {question.timeLimitSeconds}s
+          Up to {question.points} pts • {question.timeLimitSeconds}s
         </p>
       </div>
     </div>

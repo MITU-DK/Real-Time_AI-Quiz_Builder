@@ -35,7 +35,7 @@ const ResultView = ({ wasCorrect, correctOptionText, myScore }: ResultViewProps)
       )}
 
       <div className="mt-6 bg-white/80 rounded-xl p-4 border border-slate-100">
-        <p className="text-sm text-slate-400">Your score</p>
+        <p className="text-sm text-slate-400">Total score</p>
         <p className="text-3xl font-bold text-slate-800 font-[Outfit] animate-score">{myScore}</p>
       </div>
     </div>

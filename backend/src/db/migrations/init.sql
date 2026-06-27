@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS questions (
 -- pin is the 6-character code players use to join.
 CREATE TABLE IF NOT EXISTS game_sessions (
   id          SERIAL PRIMARY KEY,
-  quiz_id     INTEGER NOT NULL REFERENCES quizzes(id) ON DELETE RESTRICT,
+  quiz_id     INTEGER NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
   host_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   pin         CHAR(6) NOT NULL UNIQUE,
   status      VARCHAR(30) NOT NULL DEFAULT 'lobby_waiting'
