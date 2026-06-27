@@ -3,7 +3,8 @@
 
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001/game';
+const rawUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
+const SOCKET_URL = rawUrl.endsWith('/game') ? rawUrl : `${rawUrl}/game`;
 
 let socket: Socket | null = null;
 
