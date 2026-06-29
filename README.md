@@ -9,6 +9,10 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)](https://redis.io/)
 
+**🔗 [Live App](https://real-time-ai-quiz-builder.vercel.app/)** · **▶️ [Watch Demo](https://youtu.be/YTDhTV0_4sA)**
+
+[![QuizArena Demo](https://img.youtube.com/vi/YTDhTV0_4sA/maxresdefault.jpg)](https://youtu.be/YTDhTV0_4sA)
+
 ---
 
 ## 🎯 What It Does
