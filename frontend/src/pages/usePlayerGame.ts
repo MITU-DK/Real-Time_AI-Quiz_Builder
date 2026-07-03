@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGameStore } from '../store/useGameStore';
-import { connectSocket, getSocket } from '../services/socket';
+import { connectSocket } from '../services/socket';
 import { useSyncTimer } from '../hooks/useSyncTimer';
 import { useGameSocket } from '../hooks/useGameSocket';
 
