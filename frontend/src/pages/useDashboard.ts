@@ -19,10 +19,6 @@ export const useDashboard = () => {
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
-
   const fetchQuizzes = async () => {
     try {
       const data = await getMyQuizzes();
@@ -33,6 +29,12 @@ export const useDashboard = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+
 
   const handleGenerate = async () => {
     if (!topic.trim()) return;
@@ -50,14 +52,16 @@ export const useDashboard = () => {
         points: draft.points || q.points || 200,
       }));
 
-      await saveQuiz(
-        draft.quiz_title || draft.title || topic,
-        topic,
-        difficulty,
-        questions
-      );
+      if (questions.length === 0) {
+        throw new Error("AI failed to generate any questions. Please try again.");
+      }
+      if (questions.length !== numQuestions) {
+        throw new Error(`AI generated ${questions.length} questions instead of the requested ${numQuestions}. Please try again.`);
+      }
 
-      await fetchQuizzes();
+      const response = await saveQuiz(draft.quiz_title || draft.title || topic, topic, difficulty, questions);
+
+      setQuizzes((prev) => [response.quiz, ...prev]);
       setShowGenerator(false);
       setTopic('');
     } catch (err: any) {
@@ -74,6 +78,10 @@ export const useDashboard = () => {
     } catch (err: any) {
       setError(err.message);
     }
+  };
+
+  const handleViewQuiz = (quizId: number) => {
+    navigate(`/quiz/${quizId}`);
   };
 
   const handleDelete = async (quizId: number) => {
@@ -115,6 +123,7 @@ export const useDashboard = () => {
     handleGenerate,
     handleHost,
     handleDelete,
+    handleViewQuiz,
     handleLogout,
     resultsPin,
     setResultsPin,

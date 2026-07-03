@@ -23,7 +23,7 @@ const LoginPage = () => {
         {/* Logo / Title */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-brand-700 font-[Outfit] tracking-tight">
-            ⚡ QuizBlitz
+            ⚡ QuizArena
           </h1>
           <p className="text-slate-500 mt-2 text-sm">
             Real-Time AI-Powered Quiz Builder
@@ -84,7 +84,7 @@ const LoginPage = () => {
                 className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition"
                 placeholder="••••••••"
                 required
-                minLength={6}
+                minLength={8}
               />
             </div>
 

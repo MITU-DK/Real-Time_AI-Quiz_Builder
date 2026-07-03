@@ -52,6 +52,13 @@ export interface ReconciliationPayload {
   currentQuestionIndex: number;
   playerId: number;
   score: number;
+  // Present only if player reconnected while a question was actively running
+  activeQuestion?: {
+    questionText: string;
+    options: string[];
+    tDeadline: number;  // absolute UTC ms when the question closes
+    points: number;
+  };
 }
 
 //  REST API Types 
@@ -65,7 +72,7 @@ export interface AuthResponse {
   };
 }
 
-export interface QuizQuestion {
+export interface QuizRow {
   id: number;
   quiz_id: number;
   question_text: string;
@@ -85,7 +92,7 @@ export interface Quiz {
   difficulty: 'easy' | 'medium' | 'hard';
   created_at: string;
   updated_at: string;
-  questions?: QuizQuestion[];
+  questions?: QuizRow[];
 }
 
 export interface HostGameResponse {

@@ -8,21 +8,20 @@ import { useGameSocket } from '../hooks/useGameSocket';
 export const usePlayerGame = () => {
   const { pin } = useParams<{ pin: string }>();
 
-  // ─── Store selectors
-  const phase              = useGameStore((s) => s.phase);
-  const currentQuestion    = useGameStore((s) => s.currentQuestion);
-  const myAnswer           = useGameStore((s) => s.myAnswer);
-  const isLocked           = useGameStore((s) => s.isLocked);
+  const phase = useGameStore((s) => s.phase);
+  const currentQuestion = useGameStore((s) => s.currentQuestion);
+  const myAnswer = useGameStore((s) => s.myAnswer);
+  const isLocked = useGameStore((s) => s.isLocked);
   const correctOptionIndex = useGameStore((s) => s.correctOptionIndex);
-  const myScore            = useGameStore((s) => s.myScore);
-  const myNickname         = useGameStore((s) => s.myNickname);
-  const myPlayerId         = useGameStore((s) => s.myPlayerId);
-  const leaderboard        = useGameStore((s) => s.leaderboard);
-  const finalLeaderboard   = useGameStore((s) => s.finalLeaderboard);
-  const submitAnswer       = useGameStore((s) => s.submitAnswer);
-  const setPin             = useGameStore((s) => s.setPin);
-  const setMyPlayer        = useGameStore((s) => s.setMyPlayer);
-  const setPhase           = useGameStore((s) => s.setPhase);
+  const myScore = useGameStore((s) => s.myScore);
+  const myNickname = useGameStore((s) => s.myNickname);
+  const myPlayerId = useGameStore((s) => s.myPlayerId);
+  const leaderboard = useGameStore((s) => s.leaderboard);
+  const finalLeaderboard = useGameStore((s) => s.finalLeaderboard);
+  const submitAnswer = useGameStore((s) => s.submitAnswer);
+  const setPin = useGameStore((s) => s.setPin);
+  const setMyPlayer = useGameStore((s) => s.setMyPlayer);
+  const setPhase = useGameStore((s) => s.setPhase);
 
   const [countdown, setCountdown] = useState<number | null>(null);
 
@@ -31,16 +30,16 @@ export const usePlayerGame = () => {
 
   const timeRemaining = useSyncTimer();
 
-  // ─── Connect socket and restore credentials on mount
+  // Connect socket and restore credentials on mount
   useEffect(() => {
     if (!pin) return;
 
     setPin(pin);
 
-    // Restore player identity from localStorage (supports page refresh)
-    const storedId       = localStorage.getItem('player_id');
-    const storedNickname = localStorage.getItem('player_nickname');
-    if (storedId && storedNickname && !myPlayerId) {
+    // Restore player identity from sessionStorage (supports page refresh, isolates tabs)
+    const storedId = sessionStorage.getItem('player_id');
+    const storedNickname = sessionStorage.getItem('player_nickname');
+    if (storedId && storedNickname && !myPlayerId) {//It prevents the app from doing extra, useless work if it already knows who the player is!
       setMyPlayer(parseInt(storedId, 10), storedNickname);
     }
 
@@ -51,22 +50,22 @@ export const usePlayerGame = () => {
       socket.emit('rejoin_room', { playerId: parseInt(storedId, 10), pin });
     }
 
-    // Listen for countdown
-    socket.on('show_countdown', () => {
-      setCountdown(3);
-      const interval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev === null || prev <= 1) {
-            clearInterval(interval);
-            return null;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+    // Listen for countdown — tDeadline comes from the backend so all phones are perfectly in sync
+    socket.on('show_countdown', ({ tDeadline }) => {
+      const tick = () => {
+        const secsLeft = Math.ceil((tDeadline - Date.now()) / 1000);
+        if (secsLeft <= 0) {
+          setCountdown(null);
+        } else {
+          setCountdown(secsLeft);
+          setTimeout(tick, 200); // re-check every 200ms so a lagging phone self-corrects instantly
+        }
+      };
+      tick(); // run once immediately so the number appears without a 200ms delay
     });
 
     // NTP clock sync
-    getSocket().emit('sync_time', { t0: Date.now() });
+    socket.emit('sync_time', { t0: Date.now() });
 
     if (phase === 'idle') setPhase('lobby');
 
@@ -77,9 +76,7 @@ export const usePlayerGame = () => {
 
   const wasCorrect = myAnswer === correctOptionIndex;
   const correctOptionText =
-    correctOptionIndex !== null && currentQuestion
-      ? currentQuestion.options[correctOptionIndex]
-      : null;
+    correctOptionIndex !== null && currentQuestion ? currentQuestion.options[correctOptionIndex] : null;
 
   return {
     pin,

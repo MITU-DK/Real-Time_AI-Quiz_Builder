@@ -1,7 +1,4 @@
 //Game Store (Zustand)
-// Pure state store for real-time game data.
-// Socket event listeners live separately in hooks/useGameSocket.ts.
-// This file only handles state shape and simple setter actions.
 
 import { create } from 'zustand';
 import type { GamePhase, Player, LeaderboardEntry, QuestionStartPayload, } from '../types';
@@ -37,7 +34,6 @@ interface GameState {
   myNickname: string;
   myScore: number;
 
-  //set(...) updates Zustand state.nothing to return .
   //Actions
   setPin: (pin: string) => void;
   setIsHost: (isHost: boolean) => void;
@@ -86,7 +82,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (isLocked) return;
 
     const socket = getSocket();
-    const currentQ = get().currentQuestion;
+    const currentQ = state.currentQuestion;
     if (!currentQ) return;
 
     socket.emit('submit_answer', {

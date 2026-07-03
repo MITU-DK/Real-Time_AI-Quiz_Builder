@@ -42,25 +42,29 @@ export const useHostGame = () => {
     socket.emit('join_as_host', { pin, hostId: user.id });
     socket.emit('sync_time', { t0: Date.now() });
 
+    // Listen for countdown broadcast from the backend
+    socket.on('show_countdown', ({ tDeadline }) => {
+      const tick = () => {
+        const secsLeft = Math.ceil((tDeadline - Date.now()) / 1000);
+        if (secsLeft <= 0) {
+          setCountdown(null);
+        } else {
+          setCountdown(secsLeft);
+          setTimeout(tick, 200);
+        }
+      };
+      tick();
+    });
+
     return () => {
+      socket.off('show_countdown');
       disconnectSocket();
     };
   }, [pin, user]);
 
+  // Single clean line — backend owns the countdown and game start timing
   const handleStartGame = () => {
-    getSocket().emit('trigger_countdown', { pin });
-    setCountdown(3);
-    const interval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev === null || prev <= 1) {
-          clearInterval(interval);
-          setCountdown(null);
-          getSocket().emit('start_game', { pin });
-          return null;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    getSocket().emit('start_game', { pin });
   };
 
   return {

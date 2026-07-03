@@ -25,7 +25,7 @@ const LockedView = ({ myAnswer, question }: LockedViewProps) => {
         <div className="mt-6 px-6 py-4 bg-white rounded-xl border border-slate-100 shadow-sm">
           <p className="text-sm text-slate-500 mb-2">Your answer</p>
           <div className={`inline-flex items-center gap-3 px-5 py-3 rounded-xl text-white shadow-md ${style.bg}`}>
-            <span className="text-xl opacity-80">{style.shape}</span>
+            <span className="text-xl opacity-80">{style.label}</span>
             <span className="font-medium text-left leading-tight">{question.options[myAnswer]}</span>
           </div>
         </div>

@@ -1,4 +1,4 @@
-// ─── Socket.IO Client Service ─────────────────────────────────────────────────
+//Socket.IO Client Service 
 // Creates a singleton Socket.IO client connected to the /game namespace.
 
 import { io, Socket } from 'socket.io-client';
