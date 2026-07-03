@@ -12,7 +12,7 @@ interface GameOverViewProps {
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 const PODIUM_ORDER = [1, 0, 2]; // silver on left, gold in middle, bronze on right
-const PODIUM_HEIGHTS = ['h-36', 'h-44', 'h-28'];
+const PODIUM_HEIGHTS = ['h-44', 'h-36', 'h-28'];
 const CONFETTI_COLORS = ['#ef4444', '#3b82f6', '#f59e0b', '#22c55e', '#8b5cf6'];
 
 const GameOverView = ({ finalLeaderboard }: GameOverViewProps) => {
@@ -53,7 +53,7 @@ const GameOverView = ({ finalLeaderboard }: GameOverViewProps) => {
               <span className="text-4xl mb-2">  {MEDALS[podiumIdx]}   </span>
               <p className="font-bold text-slate-800 font-[Outfit] text-lg">    {entry.nickname}   </p>
               <p className="text-sm text-slate-500 mb-2">{entry.score} pts</p>
-              <div className={`w-24 ${PODIUM_HEIGHTS[podiumIdx]} bg-blue-${podiumIdx === 1 ? '600' : podiumIdx === 0 ? '500' : '400'} rounded-t-xl`} />
+              <div className={`w-24 ${PODIUM_HEIGHTS[podiumIdx]} bg-blue-${podiumIdx === 0 ? '600' : podiumIdx === 1 ? '500' : '400'} rounded-t-xl`} />
             </div>
           );
         })}
