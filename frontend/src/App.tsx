@@ -7,6 +7,7 @@ import HostGamePage from './pages/HostGamePage';
 import PlayerJoinPage from './pages/PlayerJoinPage';
 import PlayerGamePage from './pages/PlayerGamePage';
 import PastResultsPage from './pages/PastResultsPage';
+import QuizDetailPage from './pages/QuizDetailPage';
 
 // Protected Route Wrapper 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -18,7 +19,6 @@ const App = () => {
   const hydrate = useAuthStore((s) => s.hydrate);
 
   // Restore auth session on app start.
-  // hydrate() only reads the token from localStorage, then fetches user from DB.
   useEffect(() => {
     hydrate();
   }, []);
@@ -35,6 +35,7 @@ const App = () => {
         <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/host/:pin" element={<ProtectedRoute><HostGamePage /></ProtectedRoute>} />
         <Route path="/results/:pin" element={<ProtectedRoute><PastResultsPage /></ProtectedRoute>} />
+        <Route path="/quiz/:id" element={<ProtectedRoute><QuizDetailPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

@@ -28,24 +28,29 @@ export const usePlayerJoin = () => {
     socket.off('error');
 
     // Listen for success (player_joined) to know our playerId
-    socket.on('player_joined', (data) => {
+    const handlePlayerJoined = (data: any) => {
       // Check if this is us (latest joiner matches our nickname)
       if (data.nickname === nickname.trim()) {
+        // Remove listeners to prevent memory leaks in the game page
+        socket.off('player_joined', handlePlayerJoined);
+        socket.off('error');
+
         setStorePin(pin.trim());
         setMyPlayer(data.playerId, nickname.trim());
         setPhase('lobby');
 
-        // Persist for reconnection
-        localStorage.setItem('player_pin', pin.trim());
-        localStorage.setItem('player_nickname', nickname.trim());
-        localStorage.setItem('player_id', data.playerId.toString());
+        // Persist for reconnection (using sessionStorage to isolate tabs)
+        sessionStorage.setItem('player_nickname', nickname.trim());
+        sessionStorage.setItem('player_id', data.playerId.toString());
 
         // NTP sync
         socket.emit('sync_time', { t0: Date.now() });
 
         navigate(`/play/${pin.trim()}`);
       }
-    });
+    };
+
+    socket.on('player_joined', handlePlayerJoined);
 
     // Listen for errors
     socket.on('error', (msg: string) => {

@@ -19,7 +19,7 @@ const PlayerJoinPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-brand-700 font-[Outfit]">🎮</h1>
           <h2 className="text-2xl font-bold text-slate-800 font-[Outfit] mt-2">Join a Game</h2>
-          <p className="text-sm text-slate-400 mt-1">Enter the PIN shown on the host's screen</p>
+          <p className="text-sm text-slate-400 mt-1">Enter the PIN to Join the Game</p>
         </div>
 
         {/* Card */}

@@ -48,8 +48,8 @@ const QuestionView = ({ question, timeRemaining, answerCount, totalPlayers }: Qu
               key={i}
               className={`${OPTION_STYLES[i].bg} rounded-2xl p-6 text-white flex items-center gap-4 shadow-md`}
             >
-              <div className="flex flex-col items-center justify-center w-12 h-12 shrink-0 bg-white/20 rounded-xl">
-                 <span className="text-xl shadow-sm">{OPTION_STYLES[i].shape}</span>
+              <div className="flex flex-col items-center justify-center w-12 h-12 shrink-0">
+                <span className="text-2xl">{OPTION_STYLES[i].label}</span>
               </div>
               <span className="text-xl font-semibold leading-tight drop-shadow-sm">{option}</span>
             </div>
@@ -67,7 +67,7 @@ const QuestionView = ({ question, timeRemaining, answerCount, totalPlayers }: Qu
           </p>
           <div className="w-1.5 h-1.5 rounded-full bg-slate-300"></div>
           <p className="text-slate-500 font-medium flex items-center gap-2">
-            📝 Answers: 
+            📝 Answers:
             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold text-lg">
               {answerCount} / {totalPlayers}
             </span>

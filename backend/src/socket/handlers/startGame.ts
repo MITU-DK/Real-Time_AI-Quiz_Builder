@@ -12,19 +12,10 @@ type GameNamespace = Namespace<ClientToServerEvents, ServerToClientEvents, {}, S
 type GameSocket = Socket<ClientToServerEvents, ServerToClientEvents, {}, SocketData>;
 
 export const handleStartGame = (namespace: GameNamespace, socket: GameSocket): void => {
-  //EVENT: trigger_countdown
-  // Host triggers the 3..2..1 overlay for all clients in the room
-  socket.on('trigger_countdown', async ({ pin }) => {
-    try {
-      if (!socket.data.hostId) return;
-      namespace.to(pin).emit('show_countdown');
-    } catch (err) {
-      console.error('[game] trigger_countdown error:', err);
-    }
-  });
 
   //EVENT: start_game
   // Only the host should emit this. We verify they own the session.
+  // The backend owns the countdown — it broadcasts tDeadline and fires the question automatically.
   socket.on('start_game', async ({ pin }) => {
 
     try {
@@ -82,8 +73,16 @@ export const handleStartGame = (namespace: GameNamespace, socket: GameSocket): v
 
       console.log(`[game] Host started game for room ${pin}. ${totalQuestions} questions.`);
 
-      // 7. Start question 0
-      await advanceToQuestion(namespace, pin, 0, session.id, totalQuestions);
+      // 7. Backend owns the countdown.
+      //    Calculate tDeadline and broadcast it so every phone counts down to the EXACT same moment.
+      const COUNTDOWN_MS = 3000;
+      const tDeadline = Date.now() + COUNTDOWN_MS;
+
+      namespace.to(pin).emit('show_countdown', { tDeadline });
+
+      setTimeout(() => {
+        advanceToQuestion(namespace, pin, 0, session.id, totalQuestions);
+      }, COUNTDOWN_MS);
 
     }
     catch (err) {

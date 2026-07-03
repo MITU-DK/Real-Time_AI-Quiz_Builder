@@ -50,7 +50,7 @@ const BuzzerView = ({ question, timeRemaining, onAnswer }: BuzzerViewProps) => {
               onClick={() => onAnswer(i)}
               className={`${style.bg} ${style.activeBg} rounded-2xl flex items-center gap-3 text-white shadow-lg active:scale-95 transition-all p-6 cursor-pointer hover:-translate-y-1 hover:shadow-xl`}
             >
-              <span className="text-2xl">{style.shape}</span>
+              <span className="text-2xl">{style.label}</span>
               <span className="text-lg font-medium text-left">{question.options[i]}</span>
             </button>
           ))}

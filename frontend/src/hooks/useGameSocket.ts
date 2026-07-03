@@ -14,6 +14,7 @@ import type {
   QuestionEndPayload,
   GameOverPayload,
   SyncTimeResponsePayload,
+  ReconciliationPayload,
 } from '../types';
 
 export const useGameSocket = () => {
@@ -101,6 +102,37 @@ export const useGameSocket = () => {
       console.error('[Socket Error]', message);
     });
 
+    // Reconciliation: player rejoined after network dropout.
+    // Restores their score and question index.
+    // If activeQuestion is present, they reconnected mid-question —
+    // render the live question immediately so they don't see a blank screen.
+    socket.on('reconciled', (data: ReconciliationPayload) => {
+      const update: Record<string, unknown> = {
+        myScore: data.score,
+      };
+
+      if (data.activeQuestion) {
+        // Mid-question reconnect: restore the question UI with remaining time
+        update.phase = 'question';
+        update.currentQuestion = {
+          questionIndex: data.currentQuestionIndex,
+          questionText: data.activeQuestion.questionText,
+          options: data.activeQuestion.options,
+          timeLimitSeconds: 0, // not needed — we use tDeadline for the timer
+          points: data.activeQuestion.points,
+          tDeadline: data.activeQuestion.tDeadline,
+        };
+        update.tDeadline = data.activeQuestion.tDeadline;
+        update.myAnswer = null;
+        update.isLocked = false;
+      } else {
+        // Reconnected between questions — just restore score, keep current phase
+        update.phase = 'lobby';
+      }
+
+      useGameStore.setState(update);
+    });
+
     //Cleanup: remove all listeners when the page unmounts
     return () => {
       socket.off('player_joined');
@@ -112,6 +144,7 @@ export const useGameSocket = () => {
       socket.off('game_over');
       socket.off('joined_as_host');
       socket.off('error');
+      socket.off('reconciled');
     };
   },
     []); // runs once per mount — socket listeners not re-registered on every render

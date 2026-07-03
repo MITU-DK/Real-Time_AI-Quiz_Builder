@@ -1,6 +1,5 @@
 //Synchronized Timer Hook
-// Uses requestAnimationFrame to compute remaining time against the server's
-// absolute deadline (adjusted by NTP clock offset).
+// Uses requestAnimationFrame to compute remaining time against the server's absolute deadline (adjusted by NTP clock offset).
 // Returns timeRemaining in SECONDS (float) for smooth rendering.
 
 import { useState, useEffect, useRef } from 'react';

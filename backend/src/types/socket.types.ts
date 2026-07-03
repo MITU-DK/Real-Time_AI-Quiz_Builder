@@ -56,6 +56,13 @@ export interface ReconciliationPayload {
   currentQuestionIndex: number;
   playerId: number;
   score: number;
+  // Present only if a question is currently active (player reconnected mid-question)
+  activeQuestion?: {
+    questionText: string;
+    options: string[];
+    tDeadline: number;   // absolute UTC ms when this question closes
+    points: number;      // max points for this question
+  };
 }
 
 // ─── Phase 4: Game Loop Payloads 
@@ -104,8 +111,7 @@ export interface ClientToServerEvents {
   // Phase 4
   join_as_host: (payload: JoinAsHostPayload) => void;   // host enters the socket room
   sync_time: (payload: SyncTimePayload) => void;     // NTP clock handshake
-  trigger_countdown: (payload: { pin: string }) => void; // host triggers the 3..2..1 overlay
-  start_game: (payload: { pin: string }) => void;     // host kicks off the game
+  start_game: (payload: { pin: string }) => void;     // host requests the game to start (backend owns the countdown)
   submit_answer: (payload: SubmitAnswerPayload) => void; // player submits their choice
 }
 
@@ -119,7 +125,7 @@ export interface ServerToClientEvents {
 
   // Phase 4 — game loop
   joined_as_host: (data: JoinedAsHostPayload) => void;
-  show_countdown: () => void;
+  show_countdown: (data: { tDeadline: number }) => void; // absolute UTC ms when countdown ends
   sync_time_response: (data: SyncTimeResponsePayload) => void;
   answer_count_updated: (data: { answerCount: number }) => void;
   question_start: (data: QuestionStartPayload) => void;

@@ -1,4 +1,4 @@
-// ─── REST API Service ─────────────────────────────────────────────────────────
+// REST API Service 
 // Thin fetch wrapper for all backend HTTP endpoints.
 // Automatically attaches the JWT token from localStorage.
 
@@ -17,7 +17,7 @@ const handleResponse = async (res: Response) => {
   return data;
 };
 
-// ─── Auth 
+// Auth 
 
 export const registerUser = async (email: string, password: string, display_name: string) => {
   const res = await fetch(`${API_BASE}/auth/register`, {
@@ -43,7 +43,7 @@ export const getMe = async () => {
   return handleResponse(res);
 };
 
-// ─── Quizzes
+// Quizzes
 
 export const getMyQuizzes = async () => {
   const res = await fetch(`${API_BASE}/quizzes`, { headers: getHeaders() });
@@ -76,7 +76,12 @@ export const deleteQuiz = async (id: number) => {
   return handleResponse(res);
 };
 
-// ─── Game 
+export const getQuizById = async (id: number) => {
+  const res = await fetch(`${API_BASE}/quizzes/${id}`, { headers: getHeaders() });
+  return handleResponse(res);
+};
+
+// Game 
 
 export const hostGame = async (quizId: number) => {
   const res = await fetch(`${API_BASE}/game/host`, {

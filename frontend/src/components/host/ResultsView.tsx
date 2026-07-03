@@ -26,14 +26,13 @@ const ResultsView = ({ question, correctOptionIndex }: ResultsViewProps) => (
           return (
             <div
               key={i}
-              className={`rounded-2xl p-5 flex items-center gap-3 transition-all animate-slide-up ${
-                isCorrect
+              className={`rounded-2xl p-5 flex items-center gap-3 transition-all animate-slide-up ${isCorrect
                   ? 'bg-green-500 text-white shadow-lg shadow-green-100'
                   : 'bg-slate-100 text-slate-600'
-              }`}
+                }`}
               style={{ animationDelay: `${i * 100}ms` }}
             >
-              <span className="text-xl font-bold">{OPTION_STYLES[i].shape}</span>
+              <span className="text-xl font-bold">{OPTION_STYLES[i].label}</span>
               <span className="flex-1 font-medium">{option}</span>
               {isCorrect && <span className="text-2xl">✓</span>}
             </div>
