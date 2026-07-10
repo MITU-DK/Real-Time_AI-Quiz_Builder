@@ -42,7 +42,7 @@ const PlayerGamePage = () => {
     );
   }
 
-  // ─── Phase-based rendering
+  // Phase-based rendering
 
   if (phase === 'idle' || phase === 'lobby') {
     return <WaitingView nickname={myNickname} />;
