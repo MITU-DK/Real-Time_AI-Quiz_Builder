@@ -12,6 +12,10 @@ dotenv.config();
 
 const app = express();
 
+// Trust Railway/Vercel reverse proxy so express-rate-limit can read
+// X-Forwarded-For headers correctly. Without this it throwing an ValidationError on every request behind a cloud proxy.
+app.set('trust proxy', 1);
+
 // Security Middleware
 // Sets secure HTTP headers (X-Content-Type-Options, etc.)
 app.use(helmet());
