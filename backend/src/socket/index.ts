@@ -12,7 +12,7 @@ export const initSocket = (httpServer: HttpServer): SocketIOServer => {
   const io = new SocketIOServer<ClientToServerEvents, ServerToClientEvents, {}, SocketData>(httpServer, {
 
     cors: {
-      origin: process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
+      origin: true,
       methods: ['GET', 'POST'],
       credentials: true,
     },

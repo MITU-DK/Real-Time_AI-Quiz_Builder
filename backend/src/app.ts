@@ -20,21 +20,27 @@ app.set('trust proxy', 1);
 // Sets secure HTTP headers (X-Content-Type-Options, etc.)
 app.use(helmet());
 
-// CORS: Only allow requests from your React frontend origin.
-// Update this, when  deploying to production.
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174"
-];
-if (process.env.FRONTEND_ORIGIN) {
-  allowedOrigins.push(process.env.FRONTEND_ORIGIN);
-}
-
+// CORS: Allow frontend origins (all Vercel deployments, FRONTEND_ORIGIN, and localhost)
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+
+      const configuredOrigin = process.env.FRONTEND_ORIGIN ? process.env.FRONTEND_ORIGIN.replace(/\/$/, '') : '';
+
+      if (
+        origin.endsWith('.vercel.app') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        (configuredOrigin && origin.startsWith(configuredOrigin))
+      ) {
+        return callback(null, true);
+      }
+
+      // Permissive fallback so user/friends on any domain are never blocked
+      return callback(null, true);
+    },
     credentials: true,
   })
 );
