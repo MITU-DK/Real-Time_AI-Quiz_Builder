@@ -72,7 +72,7 @@ const LoginPage = () => {
                       if (error) setError("");
                     }}
                     placeholder="Mrs. Douglas"
-                    className="w-full rounded-xl border-none bg-zinc-100 px-4 py-3 text-base ring-1 ring-zinc-200 transition-shadow placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand"
+                    className="w-full rounded-xl border-none bg-zinc-100 px-4 py-3 text-base ring-1 ring-zinc-200 transition-shadow placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
                 </div>
               )}
@@ -94,7 +94,7 @@ const LoginPage = () => {
                     if (error) setError("");
                   }}
                   placeholder="mrs.douglas@academy.edu"
-                  className="w-full rounded-xl border-none bg-zinc-100 px-4 py-3 text-base ring-1 ring-zinc-200 transition-shadow placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand"
+                  className="w-full rounded-xl border-none bg-zinc-100 px-4 py-3 text-base ring-1 ring-zinc-200 transition-shadow placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   required
                 />
               </div>
@@ -117,7 +117,7 @@ const LoginPage = () => {
                       if (error) setError("");
                     }}
                     placeholder="••••••••"
-                    className="w-full rounded-xl border-none bg-zinc-100 py-3 pl-4 pr-12 text-base ring-1 ring-zinc-200 transition-shadow placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand"
+                    className="w-full rounded-xl border-none bg-zinc-100 py-3 pl-4 pr-12 text-base ring-1 ring-zinc-200 transition-shadow placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
                     required
                   />
                   <button
@@ -149,7 +149,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="group flex w-full items-center justify-center rounded-xl bg-brand px-6 py-3.5 font-semibold text-zinc-50 ring-2 ring-brand/20 ring-offset-2 transition-colors hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-70"
+                className="group flex w-full items-center justify-center rounded-xl bg-brand-600 px-6 py-3.5 font-semibold text-white ring-2 ring-brand-600/20 ring-offset-2 transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <span>
                   {loading
@@ -189,7 +189,7 @@ const LoginPage = () => {
                     setIsRegister(!isRegister);
                     setError("");
                   }}
-                  className="font-semibold text-zinc-950 transition-colors hover:text-brand"
+                  className="font-semibold text-zinc-950 transition-colors hover:text-brand-600"
                 >
                   {isRegister ? "Sign in" : "Register"}
                 </button>
