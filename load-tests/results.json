@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-10-01T08:12:07.188Z",
+  "config": {
+    "target": "http://localhost:3001",
+    "pin": "127960",
+    "maxUsers": 500,
+    "rampSecs": 30,
+    "holdSecs": 30
+  },
+  "results": {
+    "launched": 500,
+    "connected": 500,
+    "joinedLobby": 500,
+    "errors": 0,
+    "peakConcurrent": 500,
+    "successRate": 100,
+    "durationSecs": 62.3,
+    "latency": {
+      "p50": 36,
+      "p95": 97,
+      "p99": 118
+    }
+  }
+}

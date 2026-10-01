@@ -129,20 +129,24 @@ Real-Time_AI-Quiz_Builder/
 │       │   └── rateLimiter.ts      # AI generation rate limiting
 │       └── types/                  # Full TypeScript types for socket events & API
 │
-└── frontend/
-    └── src/
-        ├── pages/              # HostGamePage, PlayerGamePage, DashboardPage, PastResultsPage
-        ├── components/
-        │   ├── host/           # LobbyView, QuestionView, ResultsView, LeaderboardView, GameOverView
-        │   ├── player/         # WaitingView, BuzzerView, ResultView
-        │   └── shared/         # TimerBar, LeaderboardRow
-        ├── hooks/
-        │   ├── useGameSocket.ts  # All socket event listeners & state updates
-        │   └── useSyncTimer.ts   # NTP-corrected countdown timer
-        ├── store/
-        │   └── useGameStore.ts   # Zustand global game state
-        └── services/
-            └── api.ts            # Typed REST API helpers
+├── frontend/
+│   └── src/
+│       ├── pages/              # HostGamePage, PlayerGamePage, DashboardPage, PastResultsPage
+│       ├── components/
+│       │   ├── host/           # LobbyView, QuestionView, ResultsView, LeaderboardView, GameOverView
+│       │   ├── player/         # WaitingView, BuzzerView, ResultView
+│       │   └── shared/         # TimerBar, LeaderboardRow
+│       ├── hooks/
+│       │   ├── useGameSocket.ts  # All socket event listeners & state updates
+│       │   └── useSyncTimer.ts   # NTP-corrected countdown timer
+│       ├── store/
+│       │   └── useGameStore.ts   # Zustand global game state
+│       └── services/
+│           └── api.ts            # Typed REST API helpers
+│
+└── load-tests/
+    ├── load-test.js   # Custom Node.js WebSocket load test harness
+    └── results.json   # Verified test results (500 users, 100% success, 36ms p50)
 ```
 
 ---
@@ -229,6 +233,26 @@ When 50 players submit answers simultaneously, naive reads and writes to a share
 
 **3. Host Dropout Resilience**
 The entire question timer and game advancement logic runs server-side in a background scheduler, not inside the host's socket connection handler. If the host closes their browser mid-game, the timer fires, scores are computed, and all players advance to the results screen automatically.
+
+---
+
+## 🔬 Load Testing
+
+A custom Node.js harness in [`load-tests/`](./load-tests/) stress-tests the WebSocket layer by simulating 500 concurrent players joining a lobby.
+
+**Verified results on a single local Node.js process:**
+
+| Metric | Result |
+|--------|--------|
+| Peak concurrent connections | **500** |
+| Successfully joined lobby | **500 / 500** |
+| Errors | **0** |
+| Success rate | **100%** |
+| Latency p50 | **36ms** |
+| Latency p95 | **97ms** |
+| Latency p99 | **118ms** |
+
+See [`load-tests/README.md`](./load-tests/README.md) for setup and usage instructions.
 
 ---
 
